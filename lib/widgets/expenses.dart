@@ -28,6 +28,16 @@ class _ExpensesState extends State<Expenses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Toolbar with the add button
+      appBar: AppBar(
+        title: Text("Nippoga ExpenseTracker"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {},
+          )
+        ],
+      ),
       body: Column(
         children: [
           Text("The Chart"),
