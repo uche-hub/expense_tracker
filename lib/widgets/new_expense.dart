@@ -1,3 +1,4 @@
+import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
 
 class NewExpense extends StatefulWidget {
@@ -10,6 +11,25 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  DateTime? _slelectedDate;
+
+  // handles the picking date
+  void _presentDatePicker() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: firstDate,
+      lastDate: now,
+    );
+
+    // to select and save date
+    setState(() {
+      _slelectedDate = pickedDate;
+    });
+  }
 
   @override
   void dispose() {
@@ -32,21 +52,46 @@ class _NewExpenseState extends State<NewExpense> {
               'Title',
             )),
           ),
-          TextField(
-            controller: _amountController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-                label: Text(
-              'Amount',
-            )),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _amountController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      prefixText: '\u20A6 ',
+                      label: Text(
+                        'Amount',
+                      )),
+                ),
+              ),
+              SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(_slelectedDate == null ? "No Date Selected" : formatter.format(_slelectedDate!)),
+                    IconButton(
+                      onPressed: _presentDatePicker,
+                      icon: Icon(
+                        Icons.calendar_month,
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
           Row(
             children: [
               TextButton(
-                onPressed: () {},
-                child: Text(
-                  'Cancel'
-                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
               ),
               ElevatedButton(
                 onPressed: () {
